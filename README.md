@@ -1,239 +1,163 @@
-Market Simulator – Intelligent Virtual Stock Trading Engine
 
-A complete, end-to-end stock market simulation platform with live-like price movements, momentum-driven market behavior, portfolio tracking, daily resets, and a secure SQLite-powered login system.
+# 🚀Market Simulator  
 
-Built entirely in Java (Swing + OOP + Serialization + SQLite) to give a real trading experience inside a clean desktop interface.
+A desktop‑based virtual stock‑market simulation platform with realistic price movements, buy/sell execution, portfolio tracking and user login — built in Java + Swing + SQLite.
 
+## Overview  
+Market Simulator is designed to replicate a simplified yet realistic stock‑market environment on your local machine.  
+It lets users: log in, simulate real‑time price changes based on momentum & volatility, place buy/sell orders, track portfolio value and P/L, and persist market state for continuity between sessions.  
+Great for testing trading ideas, learning how markets respond, or as a sandbox for algorithmic strategies — without risking real money.
 
 
 
-📌 Overview
 
-Market Simulator is a desktop-based virtual trading environment designed to behave like a simplified real stock market.
-It features:
 
-Dynamic, momentum-based price fluctuations
 
-Daily market cycles & resets
 
-Portfolio valuation with P/L tracking
 
-Buy/Sell execution engine
 
-Persistent market state storage
 
-SQLite-backed user authentication
+## Features  
 
-Modular & scalable Java architecture
+- Momentum‑based dynamic price updates (trend + volatility + randomness)  
+- Daily market cycles and resets  
+- Real-time portfolio valuation and profit/loss tracking  
+- Buy/Sell trade execution engine  
+- User authentication & login (SQLite‑backed)  
+- Persistent simulation state (serialized + DB)  
+- Clean desktop UI built with Java Swing  
+- Modular OOP architecture for easy extension  
 
-Users can log in, trade, track profits, view market momentum, and watch their portfolio evolve in real-time—all inside a smooth Java Swing UI.
 
+##  Project Structure
 
+```bash
+src/  
+ ├── app/            # Entry point (Main.java)  
+ ├── data/           # Serialized market state / data files  
+ ├── db/             # SQLite connection & user auth  
+ ├── models/         # Domain models: Stock, Portfolio, SimulatorState, etc.  
+ ├── services/       # Core logic: MarketSimulator, PriceEngine, trade exec, etc.  
+ └── ui/             # GUI components: login screen, dashboard, trading UI, etc.  
 
 
+Plus:  
+- `.gitignore`  
+- `README.md`  
+- State/data files: sim_state.dat, market_sim_state.dat, etc.  
 
-📁 Project Structure
+```
 
-src/
-│
-├── app/
-│   └── Main.java                       # Application entry point
-│
-├── data/
-│   └── sim_state.dat                   # Serialized market state
-│
-├── db/
-│   └── DBHelper.java                   # SQLite connection + user validation
-│
-├── models/
-│   ├── Stock.java                      # Stock model: price, trend, volatility
-│   ├── Portfolio.java                  # User holdings + valuation logic
-│   └── SimulatorState.java             # Core persistent simulation state
-│
-├── services/
-│   ├── MarketSimulator.java            # Price engine + buy/sell execution
-│   └── PriceEngine.java                # Momentum-driven price updates
-│
-└── ui/
-├── LoginFrame.java                 # Login UI
-├── MainSimulatorLauncher.java      # Main dashboard launcher
-└── simulator/
-├── SimulatorDashboard.java     # Live simulation dashboard
-└── components/                 # Custom Swing UI components
 
+## How It Works (System Architecture) 
 
+1. User logs in via SQLite‑based authentication.  
+2. On successful login, the app loads the last saved simulation state (prices, holdings, history).  
+3. The price engine runs in ticks (or cycles), updating stock prices using a simple formula:  
+   `newPrice = oldPrice + (momentum * volatility) + randomNoise` — combining trend, volatility & randomness.  
+4. Users can place buy/sell orders via the UI; the engine updates holdings, cash balance, transaction history.  
+5. Portfolio value, daily/unrealized P&L, cash, holdings are updated in real‑time and reflected in the UI.  
+6. On exit or periodic save, the new market and portfolio state is serialized (and DB updated), so next login continues where you left off.  
+This keeps simulation persistent and consistent across sessions.
 
 
+## Installation & Setup  
 
-🏛️ System Architecture
-Application Layers
+1. Ensure you have **JDK 17+** installed.  
 
-Presentation Layer – Java Swing UI
-
-Service Layer – MarketSimulator & PriceEngine
-
-Domain Layer – Stock, Portfolio, SimulatorState
-
-Persistence Layer – SQLite (users) + Serialization (market state)
-
-
-
-
-
-🔀 System Flow (Text Diagram)
-
-[User Login]
-↓
-[SQLite → Validate Credentials]
-↓
-[Load sim_state.dat]
-↓
-[Main Dashboard]
-↓
-[Market Engine Updates Prices Each Tick]
-↓
-[User Executes Buy/Sell]
-↓
-[Portfolio Updates]
-↓
-[State Saved Back to sim_state.dat]
-
-
-
-
-
-
-📈 Simulation Logic
-The market engine uses a lightweight but realistic price model based on trend momentum, volatility, and noise.
-
-✔ Key Behaviors💱 Buy/Sell Execution
-When Buying
-
-Balance decreases
-
-Holdings increase
-
-Transaction recorded
-
-When Selling
-
-Shares deducted
-
-Profit/Loss realized
-
-Balance updated
-
-Portfolio Metrics
-
-Total portfolio value
-
-Unrealized P/L
-
-Daily P/L
-
-Available cash
-
-
-
-
-
-
-🗄️ Data Persistence
-
-SQLite Stores
-
-User accounts
-
-Passwords
-
-Login validation
-
-Serialization Stores
-
-Market state
-
-Prices
-
-Positions
-
-Daily reset data
-
-This dual-system ensures the market behaves consistently across app launches.
-
-Prices change every tick
-
-Trend affects direction
-
-Volatility controls magnitude
-
-Gaussian noise introduces randomness
-
-Momentum tag updates: Bullish / Bearish / Neutral
-
-Price Update Formula
-newPrice = oldPrice + (momentum * volatility) + randomNoise
-
-
-
-
-
-🚀 How to Run on Any System
-
-Install JDK 17+
-
-Install IntelliJ IDEA / VS Code
-
-Clone the repository:
-
+2. Clone the repository:  
+```bash
 git clone https://github.com/SHAUNSET/market_simulator.git
+```
+
+3. Open the project in your preferred IDE (e.g. IntelliJ IDEA or VS Code with Java support).
+
+4. Build the project (via Gradle or default compiler).
+
+5. Run the application:
+```bash
+java -cp path/to/classes app.Main  
+```
 
 
-Open the project in your IDE
-
-Build using Gradle or default compiler
-
-Run:
-src/app/Main.java
-
-
-
-
-
-📘 Math Used in the Engine
-
-Momentum = currentPrice – previousPrice
-
-% Change = ((new – old) / old) × 100
-
-Volatility = Gaussian random value
-
-Portfolio Value = Σ (shares × currentPrice)
-
-Daily P/L = todayValue – yesterdayValue
-
-Simple, efficient math keeps the simulation realistic without heavy computation.
+## Usage  
+- On launch, log in (or create a user) via the login screen.  
+- Once logged in, the market simulation dashboard shows live‑like price updates.  
+- Place buy or sell orders to test trading — portfolio value, cash balance and P/L will update dynamically.  
+- Track holdings, view history, monitor market trends via UI.  
+- Exit and re‑open later — simulation state is saved, so you continue from the last state.  
 
 
 
+## Screenshots / Demo  
+
+<img src="screenshots/Screenshot (142).png" width="600"/>
+<img src="screenshots/Screenshot (141).png" width="600"/>
+
+## TECH STACK
+
+- Java → core programming, OOP principles, logic implementation
+
+**Frontend / UI:**
+- Java Swing → GUI for login screen, dashboard, portfolio view, trade execution
+
+**Backend / Logic:**
+- Core Java classes → Price engine, trade execution, portfolio management
+- Object-Oriented Programming → encapsulation of stocks, portfolios, simulator state
+
+**Database / Storage:**
+- SQLite → user authentication, persistent storage of portfolio & market state
+- Serialization → saving simulation state locally between sessions
+
+**Tools:**
+- IDE (IntelliJ IDEA / Eclipse / VS Code with Java support)
+- Git → version control
+
+## LESSONS
+**Programming & OOP:**
+- Proper use of classes, objects, and encapsulation
+- Designing a modular system (UI, services, data models separated)
+- Handling edge cases in logic (like buying more stocks than cash allows)
+
+**UI / UX:**
+- Building desktop apps with Swing (layouts, buttons, tables)
+- Updating UI dynamically based on backend state
+- Importance of responsive and intuitive design
+
+**Data & Persistence:**
+- Connecting Java applications to SQLite
+- Serialization for saving & loading complex objects
+- Managing data consistency across sessions
+
+**Algorithmic / Logic Skills:**
+- Designing price engine (momentum + volatility + randomness)
+- Trade execution logic: updating cash, holdings, P/L
+- Handling simultaneous updates to portfolio and UI safely
+
+**Project / Engineering Skills:**
+- Integrating multiple components (UI + backend + database)
+- Debugging complex interactions between modules
+- Version control workflow with Git
+- Structuring a project for scalability and future features
 
 
-✨ Features
-Momentum-based price simulation
+## Future Roadmap  
+- Add more realistic market dynamics (news, random events, market-wide volatility)  
+- Include charts/graphs (price history, portfolio value over time)  
+- Support for multiple asset classes (e.g. derivatives / options simulation)  
+- Add transaction history export (CSV/Excel)  
+- Better UI/UX — more interactive, customizable, theme support  
+- Multi‑user support (multiple user profiles, separate portfolios)  
+## Contributing  
 
-Daily market reset logic
+Contributions are welcome! If you want to:  
+- Report bugs / issues  
+- Propose improvements / features  
+- Submit pull requests  
+Please fork the repo, create a new branch with a descriptive name, and submit a PR.  
+Ensure code style consistency, and include brief description of changes & testing steps in your PR message.  
 
-Full buy/sell trading system
+## License
 
-Real-time portfolio tracking
-
-SQLite login authentication
-
-Trend indicators (Bullish/Bearish/Neutral)
-
-Serialized simulation state
-
-Clean Java Swing UI
-
-Fully modular OOP architecture
-
+This project is licensed under the MIT License.
 
